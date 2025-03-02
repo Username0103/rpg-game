@@ -3,7 +3,7 @@
 # pylint: disable=C0114
 
 import sys
-from misc_functions import cls
+import misc_functions as mf
 import options_menu as options
 
 def menu_backend(selection: str):
@@ -12,7 +12,7 @@ def menu_backend(selection: str):
     if selection == '2':
         options.begin()
     if selection in ('3', 'exit'):
-        cls()
+        mf.cls()
         sys.exit()
     else:
         raise ValueError('did not get 1, 2, 3 or "exit" from main_menu() in menu_backend(). '
