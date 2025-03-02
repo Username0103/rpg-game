@@ -20,5 +20,6 @@ If anyone is reading this, it'd be really cool if you contributed!
 
 - Create character creation system
 - Complete battle mechanics
+- Add procedural map generation
 - Add enemies and items
-- Cross-platform input handling
+- And much, much more
