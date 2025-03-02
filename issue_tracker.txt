@@ -1,0 +1,14 @@
+code ideas:
+    make the player character a class, and pass that class around.
+    divide each part of the code into a module
+    a big data module that would contain all of the enemy data and maybe player move data
+
+game ideas:
+    have the game be on a grid, which isn't represented graphically
+    procedural generation?
+    saving needs to be accounted for early on
+    player has magic attacks and normal attacks
+    maybe make it a roguelike.
+
+issues:
+    fix keyerror in config_manager in options_menu --done--
