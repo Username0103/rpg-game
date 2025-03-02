@@ -3,25 +3,31 @@
 #pylint: disable = E0401, E0606
 
 import os
+from configparser import NoSectionError
 import config_manager
 
-if os.name == 'posix':
+if os.name == 'nt':
+    import msvcrt
+elif os.name == 'posix':
     import sys
     import tty
     import termios
-elif os.name == 'nt':
-    import msvcrt
 else:
     raise NotImplementedError
 
 
 def get_debug() -> bool:
     '''uses config.ini to determine if debug mode is on.'''
-    return bool(int(config_manager.get_config(('DEBUG', 'debug_mode'))))
+    try:
+        result = bool(int(config_manager.get_config(('DEBUG', 'debug_mode'))))
+    except NoSectionError:
+        return False
+    return result
 
-def cls():
+
+def cls(recursive_call = False) -> None:
     '''clears screen'''
-    if get_debug() is False:
+    if recursive_call or get_debug() is False :
         os_name = os.name
         if os_name == "nt":
             os.system("cls")
@@ -44,5 +50,6 @@ def getch() -> str:
     return msvcrt.getch().decode()
 
 if __name__ == "__main__":
+    print(get_debug())
     char = getch()
     print(f'getch was {char}')
