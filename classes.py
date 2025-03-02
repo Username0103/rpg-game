@@ -1,48 +1,56 @@
-'''home of classes'''
+"""home of classes"""
+
 from dataclasses import dataclass
 import pickle
 from pathlib import Path
 
-#pylint: disable = W1514
+# pylint: disable = W1514
+
 
 class Game:
-    '''Game information to save'''
+    """Game information to save"""
+
     _instances = []
     _instance_map = {}
     _next_instance_id = 0
-    '''Game class is the mother of all classes.'''
-    def __init__(self, save_name = 'savegame.sav') -> None:
-        self.current_path = Path(__file__).resolve().parent.joinpath('saves', save_name)
+    """Game class is the mother of all classes."""
+
+    def __init__(self, save_name="savegame.sav") -> None:
+        self.current_path = Path(__file__).resolve().parent.joinpath("saves", save_name)
         self.instance_id = Game._next_instance_id  # Assign unique ID
         Game._next_instance_id += 1
         Game._instances.append(self)
-        Game._instance_map[self.instance_id] = self # Store in the map
+        Game._instance_map[self.instance_id] = self  # Store in the map
 
     def save(self) -> None:
-        '''saves game'''
-        with self.current_path.open('wb') as savefile:
+        """saves game"""
+        with self.current_path.open("wb") as savefile:
             pickle.dump(Game._instances, savefile)
 
     def load(self) -> None:
-        '''loads game'''
-        with self.current_path.open('rb') as savefile:
+        """loads game"""
+        with self.current_path.open("rb") as savefile:
             Game._instances = pickle.load(savefile)
             for current_instance in Game._instances:
                 Game._instance_map[current_instance.instance_id] = current_instance
+
     @classmethod
     def get_object(cls, instance_id):
-        '''Retrieves a game instance by its ID'''
-        return cls._instance_map.get(instance_id) # Efficient dictionary lookup
+        """Retrieves a game instance by its ID"""
+        return cls._instance_map.get(instance_id)  # Efficient dictionary lookup
+
 
 @dataclass
 class Stats(Game):
-    '''stores stats that every creature has'''
+    """stores stats that every creature has"""
+
     name: str
-    leve: int # probably won't get to more than like 50
-    stre: int # player will be able to invest points manually in each stat
-    agil: int # a good default would be 5, with 5 points total per level.
+    leve: int  # probably won't get to more than like 50
+    stre: int  # player will be able to invest points manually in each stat
+    agil: int  # a good default would be 5, with 5 points total per level.
     inte: int
     endu: int
+
     def __post_init__(self):
         # derived stats:
         self.mxhl: int = self.endu * 2 + 10
@@ -55,21 +63,27 @@ class Stats(Game):
         Game.__init__(self)
 
     def _make_property(self, name, max_name) -> property:
-        _name = f'_{name}'
+        _name = f"_{name}"
+
         def getter(self):
             return getattr(self, _name)
+
         def setter(self, value):
             max_value = self, max_name
             setattr(self, _name, min(value, max_value))
+
         return property(getter, setter)
 
-    hlth = '...'
+    hlth = "..."
+
 
 class Player(Stats):
-    '''to contain player specific data and behavior'''
+    """to contain player specific data and behavior"""
+
 
 class NPC(Stats):
-    '''to contain monster specific data and behavior'''
+    """to contain monster specific data and behavior"""
+
 
 # if __name__ == "__main__":
 #     #pylint: disable = W0212

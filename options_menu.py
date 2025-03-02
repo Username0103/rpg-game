@@ -29,23 +29,23 @@ def begin() -> None:
             user_input, value = ui_result
             write(user_input, value)
         else:
-            raise TypeError(f'ui_result was None in {__name__}')
+            raise TypeError(f"ui_result was None in {__name__}")
 
 
 def create_config():
-    print('It seems you don\'t have a config.ini.')
-    print('Input Y to create one, and N to leave.')
+    print("It seems you don't have a config.ini.")
+    print("Input Y to create one, and N to leave.")
     inp = getch().lower()
 
-    if inp == 'y':
-        print('Successfully created configuration file.')
+    if inp == "y":
+        print("Successfully created configuration file.")
         sleep(1)
         cls()
         return config_manager.reset_config()
-    if inp == 'n':
+    if inp == "n":
         return False
 
-    print('Invalid input. Must be Y or N.')
+    print("Invalid input. Must be Y or N.")
     sleep(1)
     cls(True)
 
@@ -110,10 +110,13 @@ def get_range_repr(range_of, options) -> str:
     ranges = option_range(options)
     if range_of in ranges.keys():
         range_tuple = ranges[range_of]
-        return (f'Available values are between '
-               f'{range_tuple[0]} and {range_tuple[1]}.')
-    raise KeyError(f'Invalid key in {get_range_repr.__name__}. '
-                   f'Tried to get key {range_of} in dict {ranges}')
+        return (
+            f"Available values are between " f"{range_tuple[0]} and {range_tuple[1]}."
+        )
+    raise KeyError(
+        f"Invalid key in {get_range_repr.__name__}. "
+        f"Tried to get key {range_of} in dict {ranges}"
+    )
 
 
 def check_input(options: dict, inp: str) -> None | str:
@@ -121,8 +124,10 @@ def check_input(options: dict, inp: str) -> None | str:
     norange_options = get_norange_options(options)
 
     if len(list_options) != len(norange_options):
-        raise IndexError(f'Invalid length in {get_range_repr.__name__}. '
-                         f'Tried to zip {list_options} and {norange_options}')
+        raise IndexError(
+            f"Invalid length in {get_range_repr.__name__}. "
+            f"Tried to zip {list_options} and {norange_options}"
+        )
 
     option_map = dict(zip(norange_options, list_options))
     for key, value in option_map.items():
@@ -176,6 +181,7 @@ def option_range(options: dict) -> dict[str, tuple[int, int]]:
     ]
     option_names = options.keys()
     return dict(zip(option_names, option_ranges))
+
 
 if __name__ == "__main__":
     begin()
