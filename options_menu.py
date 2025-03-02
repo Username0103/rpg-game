@@ -3,14 +3,19 @@
 from time import sleep
 import config_manager
 import rpg_game_startup as leave
-from misc_functions import cls
+from misc_functions import cls, getch
 
 # pylint: disable=C0116
 
 
 def begin() -> None:
     while True:
-        available_options = config_manager.get_dict_section("USER")
+        try:
+            available_options = config_manager.get_dict_section("USER")
+        except KeyError:
+            if create_config() is False:
+                return leave.main_menu()
+            continue
         formatted_options = format_options(available_options)
         ui_result = user_interface(formatted_options, available_options)
         if isinstance(ui_result, str):
@@ -25,6 +30,24 @@ def begin() -> None:
             write(user_input, value)
         else:
             raise TypeError(f'ui_result was None in {__name__}')
+
+
+def create_config():
+    print('It seems you don\'t have a config.ini.')
+    print('Input Y to create one, and N to leave.')
+    inp = getch().lower()
+
+    if inp == 'y':
+        print('Successfully created configuration file.')
+        sleep(1)
+        cls()
+        return config_manager.reset_config()
+    if inp == 'n':
+        return False
+
+    print('Invalid input. Must be Y or N.')
+    sleep(1)
+    cls(True)
 
 
 def format_options(options: dict) -> str:
@@ -83,7 +106,7 @@ def handle_input(user_input, options) -> None | tuple[str, str]:
         return checked_input, value
 
 
-def get_range_repr(range_of, options):
+def get_range_repr(range_of, options) -> str:
     ranges = option_range(options)
     if range_of in ranges.keys():
         range_tuple = ranges[range_of]
@@ -116,12 +139,12 @@ def check_int_input(options: list, inp: str) -> None | str:
     return None
 
 
-def reset_options():
+def reset_options() -> None:
     while True:
-        cls()
+        cls(True)
         print("Are you sure you wish to reset the in-game options?")
         print("Y/N")
-        user_input = input().lower()
+        user_input = getch().lower()
         if user_input == "y":
             return config_manager.reset_config()
         if user_input == "n":
