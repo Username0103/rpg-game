@@ -45,7 +45,7 @@ The game implements a save/load system using Python's pickle module, allowing pl
 
 ## Development Status
 
-This project is currently under development and not yet playable. Some features may be incomplete or subject to change.
+This project is currently under development and not yet playable. Some features may be incomplete or subject to change.  
 If anyone is reading this, it'd be really cool if you contributed!
 
 ## Future Improvements
